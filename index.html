@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affidavit Certificate Maker</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+:root {
+  --primary: #3157d5;
+  --primary-dark: #2444b4;
+  --ink: #20283a;
+  --muted: #788195;
+  --line: #e0e4eb;
+  --page: #f1f4f9;
+  --focus-ring: rgba(49,87,213,.14);
+  --panel-shadow: 0 12px 34px rgba(25,40,75,.055);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  width: 100%;
+  min-height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  min-width: 320px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: Inter, Arial, sans-serif;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.topbar {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  padding: 17px clamp(14px,4vw,60px);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 3px 16px rgba(30,45,80,.035);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 700;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: var(--primary);
+  color: white;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 5px 14px rgba(49,87,213,.2);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.brand:hover .brand-icon {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(49,87,213,.24);
+}
+
+.brand-title { font-size: 16px; }
+.brand-subtitle { color: var(--muted); font-size: 11px; margin-top: 4px; font-weight: 400; }
+.online-tag { color: var(--muted); font-size: 11px; white-space: nowrap; }
+.online-tag i { color: var(--primary); margin-right: 5px; }
+
+main {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(12px,2.5vw,30px);
+  display: grid;
+  grid-template-columns: minmax(300px,390px) minmax(0,1fr);
+  gap: 26px;
+  align-items: start;
+}
+
+.panel, .preview-section { min-width: 0; }
+
+.panel {
+  position: relative;
+  background: white;
+  border-radius: 13px;
+  padding: clamp(15px,2vw,24px);
+  border: 1px solid var(--line);
+  box-shadow: var(--panel-shadow);
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+.panel:focus-within {
+  border-color: #d3dcf6;
+  box-shadow: 0 14px 38px rgba(25,40,75,.075);
+}
+
+h1 {
+  font-size: clamp(20px,2vw,25px);
+  margin: 0 0 8px;
+  letter-spacing: -.5px;
+}
+
+h2 { font-size: clamp(17px,1.8vw,21px); margin: 0; }
+.small { color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #30394c;
+  margin: 16px 0 7px;
+}
+
+.required { color: #c93b49; }
+
+input, select, textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 41px;
+  padding: 11px;
+  border: 1px solid #d5dbe5;
+  border-radius: 7px;
+  background: white;
+  color: var(--ink);
+  font: 13px Inter, Arial, sans-serif;
+  transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+textarea { resize: vertical; line-height: 1.5; min-height: 86px; }
+
+input:hover, select:hover, textarea:hover { border-color: #b9c4d7; }
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+select { cursor: pointer; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+}
+
+.grid > div { min-width: 0; }
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 27px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+.section-title::before {
+  content: "";
+  width: 3px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--primary);
+  display: inline-block;
+}
+
+.buttons { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+
+button {
+  border: 0;
+  padding: 12px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  font: 600 12px Inter, Arial, sans-serif;
+  box-shadow: 0 1px 2px rgba(20,30,50,.045);
+  transition: background .18s ease, color .18s ease, transform .15s ease, box-shadow .18s ease;
+}
+
+button:focus-visible { outline: 3px solid #91a9ff; outline-offset: 3px; }
+button:active { transform: translateY(1px); }
+.primary { background: var(--primary); color: white; flex: 1; }
+.primary:hover { background: var(--primary-dark); box-shadow: 0 5px 13px rgba(30,45,80,.14); }
+.secondary { background: #e9edf4; color: var(--ink); }
+.secondary:hover { background: #dfe5ef; }
+.dark { background: var(--ink); color: white; }
+.dark:hover { background: #101827; box-shadow: 0 5px 13px rgba(30,45,80,.14); }
+
+.note {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 15px 0 0;
+  border-left: 3px solid #d8e1ff;
+  padding-left: 10px;
+}
+
+.note i { color: var(--primary); margin-right: 5px; }
+
+.preview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  padding: 2px 1px;
+}
+
+.preview-toolbar .toolbar-description { margin: 5px 0 0; }
+
+.stage {
+  width: 100%;
+  min-width: 0;
+  background-color: #e1e5ec;
+  background-image: radial-gradient(#d1d7e1 .7px, transparent .7px);
+  background-size: 14px 14px;
+  padding: clamp(8px,2vw,20px);
+  overflow: auto;
+  border: 1px solid #d8dee8;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+#paper {
+  flex: 0 0 210mm;
+  width: 210mm;
+  height: 297mm;
+  min-width: 210mm;
+  background: white;
+  color: #111;
+  overflow: hidden;
+  border: 1px solid #e7e9ee;
+  box-shadow: 0 8px 30px rgba(22,32,52,.16);
+}
+
+.doc {
+  padding: 21mm 20mm 16mm;
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.5;
+}
+
+.court {
+  text-align: center;
+  font-size: 11pt;
+  margin: 0 0 5mm;
+}
+
+.doc-title {
+  text-align: center;
+  font-size: 12pt;
+  font-weight: bold;
+  margin: 0 0 8mm;
+}
+
+.intro { text-align: justify; margin: 0 0 7mm; }
+
+.clause {
+  display: grid;
+  grid-template-columns: 8mm minmax(0,1fr);
+  gap: 1mm;
+  text-align: justify;
+  margin: 0 0 3mm;
+  line-height: 1.5;
+}
+
+.clause-number { font-weight: bold; }
+
+.oath-title {
+  text-align: center;
+  font-size: 12pt;
+  font-weight: normal;
+  margin: 9mm 0 3mm;
+}
+
+.oath, .signing { text-align: justify; margin: 0 0 5mm; }
+.signing { margin-bottom: 8mm; text-align: center; }
+
+.signatures {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 5mm;
+  min-height: 20mm;
+  margin-bottom: 5mm;
+  white-space: nowrap;
+}
+
+.deponent {
+  font-weight: bold;
+  margin-right: 5mm;
+  text-align: center;
+  width: 100%;
+}
+
+.attestation {
+  margin: 0 0 0 55mm;
+  width: calc(100% - 55mm);
+  text-align: left;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+  line-height: 1.4;
+}
+
+.footer { text-align: center; padding: 20px 12px 28px; color: #8992a2; font-size: 10px; }
+
+input:disabled, select:disabled, textarea:disabled {
+  cursor: not-allowed;
+  background: #f4f6f9;
+  color: #8b93a2;
+}
+
+@media screen and (max-width:1050px) {
+  main { grid-template-columns: minmax(0,1fr); }
+  .panel { width: 100%; }
+  .stage { justify-content: flex-start; }
+}
+
+@media screen and (max-width:600px) {
+  .topbar { padding: 13px 14px; box-shadow: 0 2px 10px rgba(30,45,80,.04); }
+  .brand-icon { width: 36px; height: 36px; }
+  .brand-title { font-size: 14px; }
+  .online-tag { display: none; }
+  main { padding: 12px; gap: 17px; }
+  .panel { padding: 16px; border-radius: 11px; }
+  .grid { grid-template-columns: minmax(0,1fr); gap: 0; }
+  input, select, textarea { font-size: 16px; }
+  .buttons { flex-direction: column; }
+  .buttons button { width: 100%; min-height: 42px; }
+  .preview-toolbar { align-items: flex-start; flex-direction: column; }
+  .preview-toolbar button { width: 100%; min-height: 42px; }
+
+  .stage {
+    width: 100%;
+    padding: 8px;
+    display: block;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-size: 12px 12px;
+  }
+
+  #paper {
+    flex: none;
+    width: 210mm;
+    min-width: 210mm;
+    height: 297mm;
+    margin: 0;
+    transform-origin: top left;
+  }
+}
+
+#printAllContainer { display: none; }
+
+.all-paper {
+  flex: none;
+  width: 210mm;
+  min-width: 210mm;
+  height: 297mm;
+  background: white;
+  color: #111;
+  overflow: hidden;
+}
+
+.all-paper .doc { padding: 21mm 20mm 16mm; }
+
+@page { size: A4 portrait; margin: 0; }
+
+@media print {
+  html, body {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * { visibility: hidden !important; }
+  #paper, #paper * { visibility: visible !important; }
+
+  #paper {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 210mm !important;
+    min-width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  .doc { padding: 21mm 20mm 16mm !important; }
+
+  .stage {
+    display: block !important;
+    width: 210mm !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  .topbar, .panel, .preview-toolbar, .note, .footer {
+    display: none !important;
+    box-shadow: none !important;
+  }
+
+  body.print-all #paper { display: none !important; }
+
+  body.print-all #printAllContainer {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    visibility: visible !important;
+  }
+
+  body.print-all #printAllContainer * { visibility: visible !important; }
+
+  body.print-all .all-paper {
+    display: block !important;
+    width: 210mm !important;
+    min-width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  body.print-all .all-paper:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-icon"><i class="fa-solid fa-file-signature"></i></span>
+    <div>
+      <div class="brand-title">Affidavit Certificate Maker</div>
+      <div class="brand-subtitle">Certificate generation system</div>
+    </div>
+  </div>
+  <span class="online-tag"><i class="fa-solid fa-cloud"></i> Online icons and fonts</span>
+</header>
+
+<main>
+<section class="panel" aria-labelledby="formHeading">
+  <h1 id="formHeading">Create an affidavit</h1>
+  <p class="small">Enter candidate details and select a certificate type.</p>
+
+  <form id="affidavitForm">
+    <label for="type">Affidavit type <span class="required">*</span></label>
+    <select id="type" name="type" required>
+      <option value="enrollment">Enrollment Affidavit</option>
+      <option value="nationality">Indian Nationality Affidavit</option>
+      <option value="criminal">No Criminal Case Affidavit</option>
+    </select>
+
+    <div class="grid">
+      <div>
+        <label for="title">Candidate title <span class="required">*</span></label>
+        <select id="title" name="title" required>
+          <option>Miss</option>
+          <option>Mr.</option>
+          <option>Mrs.</option>
+          <option>Master</option>
+          <option>Shri</option>
+          <option>Smty</option>
+        </select>
+      </div>
+      <div>
+        <label for="name">Full name <span class="required">*</span></label>
+        <input id="name" name="name" required autocomplete="name" placeholder="Candidate's full name">
+      </div>
+    </div>
+
+    <label for="father">Father's name <span class="required">*</span></label>
+    <input id="father" name="father" required placeholder="Father's full name">
+
+    <div class="section-title">RESIDENTIAL ADDRESS</div>
+
+    <label for="address">House / Locality / Village <span class="required">*</span></label>
+    <textarea id="address" name="address" rows="3" required placeholder="House number, locality, village, P.O. and P.S."></textarea>
+
+    <div class="grid">
+      <div>
+        <label for="district">District <span class="required">*</span></label>
+        <input id="district" name="district" required placeholder="District">
+      </div>
+      <div>
+        <label for="state">State <span class="required">*</span></label>
+        <input id="state" name="state" required placeholder="State">
+      </div>
+    </div>
+
+    <label for="pin">PIN Code <span class="required">*</span></label>
+    <input id="pin" name="pin" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" minlength="6" required placeholder="6-digit PIN Code" title="Enter a six-digit PIN Code">
+
+    <label for="dob">Date of birth <span class="required">*</span></label>
+    <input id="dob" name="dob" type="date" required>
+
+    <div id="qualificationField">
+      <label for="qualification">Qualification and institution details</label>
+      <textarea id="qualification" name="qualification" rows="3" placeholder="e.g. B.A.LL.B. (Hons.) degree from ..."></textarea>
+    </div>
+
+    <div class="section-title">DEPONENT AND OATH DATE</div>
+
+    <div class="grid">
+      <div>
+        <label for="month">Desired month <span class="required">*</span></label>
+        <select id="month" name="month" required>
+          <option>January</option>
+          <option>February</option>
+          <option>March</option>
+          <option>April</option>
+          <option>May</option>
+          <option>June</option>
+          <option>July</option>
+          <option>August</option>
+          <option>September</option>
+          <option selected>October</option>
+          <option>November</option>
+          <option>December</option>
+        </select>
+      </div>
+      <div>
+        <label for="year">Desired year <span class="required">*</span></label>
+        <input id="year" name="year" type="number" min="1900" max="2200" value="2026" required>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="primary" type="submit"><i class="fa-solid fa-arrows-rotate"></i> Update preview</button>
+      <button class="secondary" type="reset"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+    </div>
+  </form>
+
+  <p class="note"><i class="fa-solid fa-circle-info"></i> To save a PDF, choose A4 paper and portrait orientation in the print dialog. Disable browser headers and footers.</p>
+</section>
+
+<section class="preview-section" aria-labelledby="previewHeading">
+  <div class="preview-toolbar">
+    <div>
+      <h2 id="previewHeading">Certificate preview</h2>
+      <p class="small toolbar-description">A4 portrait document</p>
+    </div>
+    <button class="dark" id="printButton" type="button"><i class="fa-solid fa-file-pdf"></i> Print / Save PDF</button>
+    <button class="primary" id="printAllButton" type="button"><i class="fa-solid fa-files"></i> Generate All Three Certificates</button>
+  </div>
+
+  <div class="stage">
+    <article id="paper">
+      <div class="doc">
+        <p class="court"><strong>BEFORE THE NOTARY PUBLIC ::: KAMRUP (METROPOLITAN) AT GUWAHATI</strong></p>
+
+        <h2 class="doc-title"><u id="certificateTitle">AFFIDAVIT</u></h2>
+
+        <p id="intro" class="intro"></p>
+        <div id="clauses"></div>
+
+        <h3 class="oath-title"><u>Oath</u></h3>
+        <p class="oath"><i>“I swear that this declaration is true, that it conceals nothing and that no part of its false, so help me God.”</i></p>
+        <p id="signing" class="signing"></p>
+
+        <div class="signatures">
+          <div>Identified by:<br><br><br>Advocate</div>
+          <div class="deponent">DEPONENT</div>
+        </div>
+
+        <p id="attestation" class="attestation"></p>
+      </div>
+    </article>
+  </div>
+
+  <div id="printAllContainer" aria-hidden="true"></div>
+  <p class="note"><i class="fa-solid fa-eye"></i> The A4 preview automatically fits mobile screens. The document remains in A4 portrait format for printing.</p>
+</section>
+</main>
+
+<footer class="footer">Affidavit Certificate Maker. copyright anna</footer>
+
+<script>
+"use strict";
+
+const templates = {
+  enrollment: [
+    "That, I am a Citizen of India by birth and a permanent resident of the aforesaid locality.",
+    "That, I have obtained {{qualification}} and I am eligible for admission and enrolment as an advocate under Advocates Act, 1961 (Act XXV of 1961) in the Bar Council of Assam, Nagaland, Mizoram, Arunachal Pradesh and Sikkim.",
+    "That, the documents annexed along with the Enrolment application which I am submitting for Enrolment as an Advocate under Advocates Act, 1961 (Act XXV of 1961) in the Bar Council of Assam, Nagaland, Mizoram, Arunachal Pradesh and Sikkim are genuine and correct.",
+    "That, this affidavit shall be used as a piece of documentary evidence to prove the facts stated above and it will be submitted before the concerned authority as and when required.",
+    "That, all the statements made in the affidavit para 1 to 4 are true to the best of my knowledge and belief."
+  ],
+
+  nationality: [
+    "That, I am a Citizen of India by birth and a permanent resident of the aforesaid locality.",
+    "That, I was born {{dob}} and as such I am an <b>Indian National</b> by birth and I am entitled to all privileges granted by the Constitution of India.",
+    "That, this affidavit shall be used as a piece of documentary evidence to prove that my Nationality is Indian and it will be submitted before the concerned authority as and when required.",
+    "That, all the statements made in the Affidavit para 1 to 3 are true to the best of my knowledge and belief."
+  ],
+
+  criminal: [
+    "That, I am a Citizen of India by birth and a permanent resident of the aforesaid locality.",
+    "That, I hereby declare that there is no criminal case pending against me.",
+    "That, I have not been convicted in any criminal case in the past.",
+    "That, this affidavit shall be used as a piece of documentary evidence to prove the facts stated above and it will be submitted before the concerned authority as and when required.",
+    "That, all the statements made in the Affidavit para 1 to 4 are true to the best of my knowledge and belief."
+  ]
+};
+
+const $ = id => document.getElementById(id);
+const originalDocumentTitle = document.title;
+
+function preparePDFFileName(type) {
+  const candidateName = ($("name").value.trim() || "Candidate")
+    .replace(/[\\/:*?"<>|]/g, "-");
+
+  const certificateNames = {
+    enrollment: "Enrollment Certificate",
+    nationality: "Indian Nationality Certificate",
+    criminal: "No Criminal Case Certificate",
+    all: "All Certificates"
+  };
+
+  document.title = `${certificateNames[type] || "Certificate"} - ${candidateName}`;
+}
+
+function calculateAge(value) {
+  if (!value) return "[age]";
+
+  const dob = new Date(value + "T00:00:00");
+  const today = new Date();
+
+  if (Number.isNaN(dob.getTime()) || dob > today) return "[age]";
+
+  let age = today.getFullYear() - dob.getFullYear();
+
+  const beforeBirthday =
+    today.getMonth() < dob.getMonth() ||
+    (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate());
+
+  if (beforeBirthday) age--;
+
+  return age;
+}
+
+function formatDOB(value) {
+  if (!value) return "[date of birth]";
+
+  const [year, month, day] = value.split("-");
+  return `${day}/${month}/${year}`;
+}
+
+function getRelationship(title) {
+  return ["Miss", "Mrs.", "Smty"].includes(title) ? "daughter" : "son";
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+/* Mobile preview scaling; print dimensions remain A4 */
+function fitMobilePreview() {
+  const stage = document.querySelector(".stage");
+  const paper = $("paper");
+
+  if (!stage || !paper) return;
+
+  if (window.matchMedia("(max-width: 600px)").matches) {
+    paper.style.transform = "none";
+
+    const availableWidth = stage.clientWidth - 16;
+    const paperWidth = paper.offsetWidth;
+    const paperHeight = paper.offsetHeight;
+
+    if (availableWidth <= 0 || paperWidth <= 0) return;
+
+    const scale = Math.min(availableWidth / paperWidth, 1);
+    paper.style.transformOrigin = "top left";
+    paper.style.transform = `scale(${scale})`;
+    stage.style.height = `${paperHeight * scale + 16}px`;
+  } else {
+    paper.style.transform = "none";
+    stage.style.height = "";
+  }
+}
+
+function updateCertificate() {
+  const type = $("type").value;
+  const title = $("title").value;
+  const name = $("name").value.trim() || "[candidate name]";
+  const father = $("father").value.trim() || "[father's name]";
+  const address = $("address").value.trim() || "[house/locality/village]";
+  const district = $("district").value.trim() || "[district]";
+  const state = $("state").value.trim() || "[state]";
+  const pin = $("pin").value.trim() || "[PIN Code]";
+  const dob = $("dob").value;
+  const month = $("month").value;
+  const year = $("year").value || "2026";
+  const qualification = $("qualification").value.trim() || "[qualification and institution details]";
+  const relationship = getRelationship(title);
+
+  $("qualificationField").hidden = type !== "enrollment";
+
+  const titles = {
+    enrollment: "ENROLMENT AFFIDAVIT",
+    nationality: "INDIAN NATIONALITY AFFIDAVIT",
+    criminal: "NO CRIMINAL CASE AFFIDAVIT"
+  };
+
+  $("certificateTitle").textContent = titles[type];
+
+  $("intro").innerHTML =
+    `I, <strong>${escapeHTML(title)} ${escapeHTML(name)}</strong>, ` +
+    `aged about ${calculateAge(dob)} years, ` +
+    `${relationship} of Mr. ${escapeHTML(father)}, ` +
+    `a resident of ${escapeHTML(address)}, ` +
+    `District- ${escapeHTML(district)}, ` +
+    `${escapeHTML(state)}, PIN- ${escapeHTML(pin)}, ` +
+    `do hereby solemnly affirm and declare as follows:`;
+
+  $("clauses").replaceChildren();
+
+  templates[type].forEach((original, index) => {
+    const text = original
+      .replaceAll("{{qualification}}", escapeHTML(qualification))
+      .replaceAll("{{dob}}", escapeHTML(formatDOB(dob)));
+
+    const row = document.createElement("div");
+    row.className = "clause";
+
+    const number = document.createElement("span");
+    number.className = "clause-number";
+    number.textContent = `${index + 1}.`;
+
+    const content = document.createElement("span");
+    content.innerHTML = text
+      .replaceAll("&lt;b&gt;", "<b>")
+      .replaceAll("&lt;/b&gt;", "</b>");
+
+    row.append(number, content);
+    $("clauses").appendChild(row);
+  });
+
+  $("signing").textContent =
+    `And I sign this Affidavit on this ……… day of ${month}, ${year} at Guwahati.`;
+
+  /* Attestation sentence arranged over three lines and shifted right */
+  $("attestation").innerHTML =
+    `Solemnly affirm and declared before me by the deponent<br>` +
+    `who is identified by ............................................. Advocate<br>` +
+    `today on this …… day of ${escapeHTML(month)}, ${escapeHTML(year)} at Guwahati.`;
+
+  fitMobilePreview();
+}
+
+$("affidavitForm").addEventListener("submit", event => {
+  event.preventDefault();
+  if ($("affidavitForm").reportValidity()) updateCertificate();
+});
+
+$("affidavitForm").addEventListener("input", updateCertificate);
+$("affidavitForm").addEventListener("change", updateCertificate);
+
+$("printButton").addEventListener("click", () => {
+  const form = $("affidavitForm");
+  if (!form.reportValidity()) return;
+
+  updateCertificate();
+
+  $("paper").style.transform = "none";
+  const stage = document.querySelector(".stage");
+  if (stage) stage.style.height = "";
+
+  preparePDFFileName($("type").value);
+  setTimeout(() => window.print(), 100);
+});
+
+$("printAllButton").addEventListener("click", () => {
+  const form = $("affidavitForm");
+  if (!form.reportValidity()) return;
+
+  const selectedType = $("type").value;
+  const printContainer = $("printAllContainer");
+  const certificateTypes = ["enrollment", "nationality", "criminal"];
+
+  printContainer.replaceChildren();
+
+  certificateTypes.forEach(type => {
+    $("type").value = type;
+    updateCertificate();
+
+    const page = $("paper").cloneNode(true);
+    page.removeAttribute("id");
+    page.classList.add("all-paper");
+    page.setAttribute("aria-label", `${type} affidavit certificate`);
+    printContainer.appendChild(page);
+  });
+
+  $("type").value = selectedType;
+  updateCertificate();
+
+  document.body.classList.add("print-all");
+  $("paper").style.transform = "none";
+
+  const stage = document.querySelector(".stage");
+  if (stage) stage.style.height = "";
+
+  preparePDFFileName("all");
+  setTimeout(() => window.print(), 100);
+});
+
+$("affidavitForm").addEventListener("reset", () => {
+  setTimeout(() => {
+    $("month").value = "October";
+    $("year").value = "2026";
+    updateCertificate();
+  }, 0);
+});
+
+window.addEventListener("resize", fitMobilePreview);
+window.addEventListener("orientationchange", fitMobilePreview);
+
+window.addEventListener("beforeprint", () => {
+  $("paper").style.transform = "none";
+});
+
+window.addEventListener("afterprint", () => {
+  document.body.classList.remove("print-all");
+  $("printAllContainer").replaceChildren();
+  document.title = originalDocumentTitle;
+  fitMobilePreview();
+});
+
+updateCertificate();
+</script>
+</body>
+</html>
